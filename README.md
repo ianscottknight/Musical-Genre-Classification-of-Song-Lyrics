@@ -2,9 +2,17 @@
 
 ## Authors
 
-### Ian Scott Knight and Lewin Cary
+### Ian Scott Knight 
 
-### Stanford University
+Department of Symbolic Systems, Stanford University
+
+isknight@stanford.edu
+
+### Lewin Cary
+
+Department of Computer Science, Stanford University
+
+caryl@stanford.edu
 
 ## Abstract 
 
