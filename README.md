@@ -1,7 +1,10 @@
 # Musical Genre Classification Based on Lyrics
 
-## Ian Scott Knight and Lewin Cary
-## Stanford University
+## Authors
+
+### Ian Scott Knight and Lewin Cary
+
+### Stanford University
 
 ## Abstract 
 
