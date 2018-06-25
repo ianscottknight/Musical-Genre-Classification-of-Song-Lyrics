@@ -1,4 +1,4 @@
-# Musical Genre Classification Based on Lyrics
+# Musical Genre Classification of Song Lyrics
 
 ## Authors
 
