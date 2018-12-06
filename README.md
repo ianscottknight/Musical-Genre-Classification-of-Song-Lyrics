@@ -35,24 +35,38 @@ These attempts have relied mostly on sonic analysis approaches, and have had lim
 ### Dataset
 
 Our dataset is derived from the musiXmatch dataset, a subset of the famous Million Song Dataset (MSD) that includes the lyrics of 237,701 songs in addition to their other data as taken from the original MSD. Both datasets are curated by LabROSA, a musicological institution at Columbia University. 
+
 The lyrics are stored in a bag-of-words format, where words are represented as positive integers. For efficiency, only the top 5000 most frequently uttered words in the total song vocabulary were included. Therefore, each song’s lyrics are delineated by the a list of (token, n) tuples, where n is the number of instances of that token (i.e. word) in the song. We are also given a mapping of integer tokens to their corresponding word, which comes in lemmatized form. 
+
 At this point, we vectorized the lyrical data into 5000-dimensional vector representations (one for each token/word), where the value for every dimension is equal to the number of instances of the corresponding token/word in a given song. Therefore, most values are zero. 
 
 ### Preprocessing: Matching musiXmatch Song ID to MSD Song ID 
 
 As it exists, the musiXmatch dataset keeps track of songs by a different ID system than that of the original Million Songs Dataset. Since LabROSA does not provide a mapping of musiXmatch song ID to song name/album/artist, it was necessary to do so ourselves by means of the following process: 
-Match musiXmatch song ID to MSD song ID using a mapping provided by LabROSA
-Match the corresponding MSD song ID to the song name/album/artist using another mapping provided by LabROSA
+
+* Using the csv files, match musiXmatch song ID to MSD song ID using the mapping provided by LabROSA: http://labrosa.ee.columbia.edu/millionsong/sites/default/files/AdditionalFiles/mxm_779k_matches.txt.zip
+
+* Match the corresponding MSD song ID to the song name/album/artist using the same mapping
+
 After completing this, we knew which songs were which in our musiXmatch dataset. By using the data categories included in the MSD dataset, we could now work on collecting genre information and mapping it to musiXmatch song ID.
+
+* Download the MSD tags sqlite database provided by LabROSA: http://labrosa.ee.columbia.edu/millionsong/sites/default/files/lastfm/lastfm_tags.db
+
+* Derive the tid.csv and tags.csv files from the sqlite database by saving all the unique values of each respective field to a csv
+
+* Derive the tid_tag.csv file from the sqlite database to a csv of the following format: The tid_tag.csv file consists of three columns, being "track_id", "tag_id", and "score" (which is the number of times that tag was used for that track). Each row is a unique track-and-tag pair. This means that many rows will have the same track id but different tag ids, and likewise many rows will have the same tag id but different track ids. This should be relatively simple to implement using a sqlite script. 
+
+* Map the MSD tags to songs within the MusiXmatch dataset and assign genre classes usign these tags as approximations of genre.
 
 ### Preprocessing: Genre Class Creation
 
 We were unable to extract genre information from the MSD without some form of preprocessing, because it does not include “genre” proper as a data category. Instead, it assigns a set of labels called “tags”, which could be anything from broad genre (e.g. “rock”) to ultra-specific genre (e.g. “Australian didgeri-bluegrass”) to something else entirely (e.g. “this goes hard in the paint bro”). These tags are scraped from tags provided real-world listeners on Last.fm. 
+
 Due to the large variety of tags, we needed to devise a method for isolating the broad genre tags and assigning them to each song ID as a new data category. The process we implemented is as follows:
-Remove all tags not included in the pre-selected genres we decided to use for this project: 
-pop, rock, hip-hop, country, metal, electronic, alternative, r&b
-Count the number of instances of genre tags for each genre for each song
-Assign the genre with the most instances to the given song as the song’s genre
+
+* Remove all tags not included in the pre-selected genres we decided to use for this project: pop, rock, hip-hop, country, metal, electronic, alternative, r&b
+* Count the number of instances of genre tags for each genre for each song
+* Assign the genre with the most instances to the given song as the song’s genre
 
 ### Preprocessing: Distribution Correction
 
@@ -61,6 +75,7 @@ At this point, we successfully created a dataset of song IDs to their de facto g
 <img width="707" alt="screen shot 2018-06-23 at 4 04 14 am" src="https://user-images.githubusercontent.com/25094252/41807857-b82ff040-769a-11e8-9acb-12bb91844c66.png">
 
 Given that “r&b” was extremely underrepresented even compared to the second least common genre (“alternative”), we decided to simply remove it as a genre, leaving 7 genres total. 
+
 We then sampled every genre the same number of times as the number of songs in the “alternative” genre, producing a smaller but evenly distributed dataset of 62,706 songs. 
 
 ## Feature Selection
