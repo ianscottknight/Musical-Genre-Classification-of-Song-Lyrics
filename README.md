@@ -44,19 +44,11 @@ At this point, we vectorized the lyrical data into 5000-dimensional vector repre
 
 As it exists, the musiXmatch dataset keeps track of songs by a different ID system than that of the original Million Songs Dataset. Since LabROSA does not provide a mapping of musiXmatch song ID to song name/album/artist, it was necessary to do so ourselves by means of the following process: 
 
-* Using the csv files, match musiXmatch song ID to MSD song ID using the mapping provided by LabROSA: http://labrosa.ee.columbia.edu/millionsong/sites/default/files/AdditionalFiles/mxm_779k_matches.txt.zip
+* Match musiXmatch song ID to MSD song ID using the mapping provided by LabROSA: http://labrosa.ee.columbia.edu/millionsong/sites/default/files/AdditionalFiles/mxm_779k_matches.txt.zip
 
 * Match the corresponding MSD song ID to the song name/album/artist using the same mapping
 
 After completing this, we knew which songs were which in our musiXmatch dataset. By using the data categories included in the MSD dataset, we could now work on collecting genre information and mapping it to musiXmatch song ID.
-
-* Download the MSD tags sqlite database provided by LabROSA: http://labrosa.ee.columbia.edu/millionsong/sites/default/files/lastfm/lastfm_tags.db
-
-* Derive the tid.csv and tags.csv files from the sqlite database by saving all the unique values of each respective field to a csv
-
-* Derive the tid_tag.csv file from the sqlite database to a csv of the following format: The tid_tag.csv file consists of three columns, being "track_id", "tag_id", and "score" (which is the number of times that tag was used for that track). Each row is a unique track-and-tag pair. This means that many rows will have the same track id but different tag ids, and likewise many rows will have the same tag id but different track ids. This should be relatively simple to implement using a sqlite script. 
-
-* Map the MSD tags to songs within the MusiXmatch dataset and assign genre classes usign these tags as approximations of genre.
 
 ### Preprocessing: Genre Class Creation
 
@@ -64,8 +56,18 @@ We were unable to extract genre information from the MSD without some form of pr
 
 Due to the large variety of tags, we needed to devise a method for isolating the broad genre tags and assigning them to each song ID as a new data category. The process we implemented is as follows:
 
+* Download the Last.fm tags sqlite database provided by LabROSA: http://labrosa.ee.columbia.edu/millionsong/sites/default/files/lastfm/lastfm_tags.db
+
+* Derive the tid.csv and tags.csv files from the sqlite database by saving all the unique values of each respective field to a one-column csv file.
+
+* Derive the tid_tag.csv file from the sqlite database to a csv of the following format: The tid_tag.csv file consists of three columns, being "track_id", "tag_id", and "score" (which is the number of times that tag was used for that track). Each row is a unique track-and-tag pair. This means that many rows will have the same track id but different tag ids, and likewise many rows will have the same tag id but different track ids. This should be relatively simple to implement using a sqlite script. 
+
+* Map the MSD tags to songs within the MusiXmatch dataset and assign genre classes usign these tags as approximations of genre.
+
 * Remove all tags not included in the pre-selected genres we decided to use for this project: pop, rock, hip-hop, country, metal, electronic, alternative, r&b
+
 * Count the number of instances of genre tags for each genre for each song
+
 * Assign the genre with the most instances to the given song as the song’s genre
 
 ### Preprocessing: Distribution Correction
