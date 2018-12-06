@@ -62,8 +62,6 @@ Due to the large variety of tags, we needed to devise a method for isolating the
 
 * Derive the tid_tag.csv file from the sqlite database to a csv of the following format: The tid_tag.csv file consists of three columns, being "track_id", "tag_id", and "score" (which is the number of times that tag was used for that track). Each row is a unique track-and-tag pair. This means that many rows will have the same track id but different tag ids, and likewise many rows will have the same tag id but different track ids. This should be relatively simple to implement using a sqlite script. 
 
-* Map the MSD tags to songs within the MusiXmatch dataset and assign genre classes usign these tags as approximations of genre.
-
 * Remove all tags not included in the pre-selected genres we decided to use for this project: pop, rock, hip-hop, country, metal, electronic, alternative, r&b
 
 * Count the number of instances of genre tags for each genre for each song
