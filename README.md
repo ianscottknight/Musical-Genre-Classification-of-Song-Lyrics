@@ -56,11 +56,14 @@ We were unable to extract genre information from the MSD without some form of pr
 
 Due to the large variety of tags, we needed to devise a method for isolating the broad genre tags and assigning them to each song ID as a new data category. The process we implemented is as follows:
 
-* Download the Last.fm tags sqlite database provided by LabROSA: http://labrosa.ee.columbia.edu/millionsong/sites/default/files/lastfm/lastfm_tags.db
+* The tid_tag.csv file was too large to include in this repository, so you'll have to derive it yourself. Here's how: 
 
-* Derive the tid.csv and tags.csv files from the sqlite database by saving all the unique values of each respective field to a one-column csv file.
+1. Download the sqlite database here: http://labrosa.ee.columbia.edu/millionsong/sites/default/files/AdditionalFiles/mxm_dataset.db
 
-* Derive the tid_tag.csv file from the sqlite database to a csv of the following format: The tid_tag.csv file consists of three columns, being "track_id", "tag_id", and "score" (which is the number of times that tag was used for that track). Each row is a unique track-and-tag pair. This means that many rows will have the same track id but different tag ids, and likewise many rows will have the same tag id but different track ids. This should be relatively simple to implement using a sqlite script. 
+2. Write a SQL script to derive the tid_tag.csv formatted in the following way (unfortunately I did not save the script):
+The tid_tag.csv file consists of three columns: "track_id", "tag_id", and "score" (which is the number of times that tag was used for that track). Each row is a unique track-and-tag pair. This means that many rows will have the same track id but different tag ids, and likewise many rows will have the same tag id but different track ids. This should be relatively simple to implement if you know SQL. 
+
+* It is also worth knowing that the tid.csv and tags.csv files were derived from the same sqlite database by just saving all the unique values of each respective field (i.e. track id and tags). 
 
 * Remove all tags not included in the pre-selected genres we decided to use for this project: pop, rock, hip-hop, country, metal, electronic, alternative, r&b
 
